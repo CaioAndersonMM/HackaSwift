@@ -9,25 +9,40 @@ import SwiftUI
 
 struct SongDetail: View {
     var x : Song
-    @State private var vinylRotation: Double = 20
+    @State private var vinylRotation: Double = 10
     var body: some View {
         ZStack{
             LinearGradient(gradient: Gradient(colors: [.blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .frame(width: .infinity, height: .infinity)
             
+           
             VStack{
                 Spacer()
-                
-                AsyncImage(url: URL(string: x.capa)){ phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 200, height: 200)
-                            .cornerRadius(10)
+                ZStack{
+                    Image("vinil")
+                                  .resizable()
+                                  .scaledToFill()
+                                  .frame(width: 350, height: 350)
+                                  .rotationEffect(.degrees(vinylRotation))
+                    
+                    AsyncImage(url: URL(string: x.capa)){ phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 200, height: 200)
+                                .cornerRadius(80)
+                              
+                        }
+                        
                     }
+
+                    
                 }
-                
+               
+                                
+               
+            
                 
                 Text("\(x.name)").foregroundColor(.white).font(.title)
                 Text("\(x.artist)").foregroundColor(.white).font(.subheadline)
@@ -46,7 +61,12 @@ struct SongDetail: View {
             }
        
             
-        }.edgesIgnoringSafeArea(.all)
+        }.onAppear(){
+            withAnimation(Animation.linear(duration: 5).repeatForever(autoreverses: false)) {
+                vinylRotation = 360
+            }
+        }
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
